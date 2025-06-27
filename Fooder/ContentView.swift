@@ -40,7 +40,8 @@ struct ContentView: View {
        Donation(id: UUID().uuidString, name: "卵", recieved: false),
        Donation(id: UUID().uuidString, name: "りんご", recieved: true),
        Donation(id: UUID().uuidString, name: "バナナ", recieved: false),
-       Donation(id: UUID().uuidString, name: "お米", recieved: true)
+       Donation(id: UUID().uuidString, name: "お米", recieved: true),
+      Donation(id: UUID().uuidString, name: "お米", recieved: true)
    ]
    
    var body: some View {
