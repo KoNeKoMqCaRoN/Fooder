@@ -31,7 +31,7 @@ struct Donation: Identifiable {
 }
 
 
-struct ContentView: View {
+struct HomeView: View {
    let donataions: [Donation] = [
       Donation(id: UUID().uuidString, name: "レタス", recieved: true),
        Donation(id: UUID().uuidString, name: "トマト", recieved: true),
@@ -64,7 +64,7 @@ struct ContentView: View {
    
 }
 
-extension ContentView {
+extension HomeView {
    
    private var header : some View {
       HStack {
@@ -178,5 +178,5 @@ extension ContentView {
 }
 
 #Preview {
-   ContentView()
+   HomeView()
 }
