@@ -30,6 +30,12 @@ struct Donation: Identifiable {
    
 }
 
+struct TestView: View {
+   var body: some View {
+      Color.blue
+   }
+}
+
 
 struct HomeView: View {
    let donataions: [Donation] = [
@@ -59,7 +65,7 @@ struct HomeView: View {
          donateList
       }
       .padding()
-      Spacer()
+      
    }
    
 }
