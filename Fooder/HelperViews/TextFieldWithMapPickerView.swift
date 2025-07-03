@@ -26,7 +26,7 @@ struct TextFieldWithMapPickerView: View {
             )
             .overlay(alignment: .trailing) {
                 NavigationLink {
-                    Text("Map Picker")
+                    AdressPickerMapView(adress: $adress, lat: $lat, lng: $lng)
                 } label: {
                     Image(systemName: "map")
                         .font(.title3.bold())
@@ -45,11 +45,14 @@ struct TextFieldWithMapPickerView: View {
     @State var lat: Double = 0.31
     @Previewable
     @State var lng: Double = 0.13
-
-    TextFieldWithMapPickerView(
-        adress: $adress,
-        lat: $lat,
-        lng: $lng,
-        placeholder: "例：東京都千代田区"
-    )
+    
+    NavigationStack {
+        TextFieldWithMapPickerView(
+            adress: $adress,
+            lat: $lat,
+            lng: $lng,
+            placeholder: "例：東京都千代田区"
+        )
+    }
+    
 }
