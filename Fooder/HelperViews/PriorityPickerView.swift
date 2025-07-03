@@ -76,10 +76,10 @@ struct PriorityPickerView: View {
             selectedPriority = priority
         } label: {
             Text(priority.japaneseString)
-                .font(.title2)
+                .font(.title3)
                 .fontWeight(isSelected ? .heavy : .regular)
                 .frame(maxWidth: .infinity)
-                .frame(height: 60)
+                .frame(height: 55)
                 .background(isSelected ? priority.color : .clear)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)

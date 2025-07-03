@@ -77,7 +77,7 @@ struct ImagePickerScrollView: View {
             .frame(width: 120, height: 120)
             .background(.gray.opacity(0.1))
             .cornerRadius(12)
-            .foregroundColor(.blue)
+            .foregroundColor(.gray)
         }
     }
     
