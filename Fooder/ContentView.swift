@@ -32,6 +32,7 @@ struct Donation: Identifiable {
 
 
 struct ContentView: View {
+    @State private var showDonationSheetView: Bool = false
    let donataions: [Donation] = [
       Donation(id: UUID().uuidString, name: "レタス", recieved: true),
        Donation(id: UUID().uuidString, name: "トマト", recieved: true),
@@ -58,8 +59,12 @@ struct ContentView: View {
          
          donateList
       }
+      .fullScreenCover(isPresented: $showDonationSheetView, content: {
+          NavigationStack {
+              DonationSheetView()
+          }
+      })
       .padding()
-      Spacer()
    }
    
 }
@@ -97,7 +102,7 @@ extension ContentView {
    private var donateRequestBtn : some View {
       HStack {
          Button {
-            // action
+             showDonationSheetView.toggle()
          } label: {
             //                       .LinearGradient(gradient: Gradient(colors: [Color.white,Color.orange]), startPoint: .init(x: 0, y: 0), endPoint: .init(x: 1, y: 1))
             VStack {
