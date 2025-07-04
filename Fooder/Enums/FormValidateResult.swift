@@ -21,4 +21,5 @@ enum InputField {
     case phoneNumber
     case allergens
     case comment
+    case priority
 }
