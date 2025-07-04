@@ -58,5 +58,7 @@ struct AllergensPickerView: View {
 
 #Preview {
     @Previewable @State var selectedAllergens: Set<Allergen> = []
-    AllergensPickerView(selectedAllergens: $selectedAllergens)
+    NavigationStack {
+        AllergensPickerView(selectedAllergens: $selectedAllergens)
+    }
 }
