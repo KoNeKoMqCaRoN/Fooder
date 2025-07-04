@@ -17,8 +17,8 @@ extension CLLocationCoordinate2D: @retroactive Equatable {
 
 struct AdressPickerMapView: View {
     @State private var cameraPosition: MapCameraPosition = .automatic
-    
-    @State var userPinnedLocation: CLLocationCoordinate2D? = nil
+    @State private var showMoveCameraButton: Bool = true
+    @State private var userPinnedLocation: CLLocationCoordinate2D? = nil
 
     @Binding var adress: String
     @Binding var lat: Double
@@ -54,34 +54,73 @@ struct AdressPickerMapView: View {
                 lng = coordinate.longitude
             }
         })
-        
         .overlay(alignment: .top) {
+            adressTextField
+        }
+        
+    }
+    
+    @ViewBuilder
+    private var adressTextField: some View {
+        VStack {
             TextField("例: 東京都渋谷区渋谷3-12-1", text: $adress)
                 .padding()
                 .frame(maxWidth: .infinity)
                 .frame(height: 55)
                 .background(.thickMaterial)
-                .cornerRadius(10)
+                .cornerRadius(60)
                 .overlay(alignment: .trailing) {
-                    if !adress.isEmpty {
-                        Button {
-                            adress = ""
-                        } label: {
-                            Image(systemName: "x.circle")
-                        }
-                        .foregroundStyle(.red)
-                        .padding()
-                    }
+                    clearAdressButton
                 }
                 .padding()
                 .onSubmit {
                     Task {
                         self.userPinnedLocation = await getCoordinates(from: adress)
                         moveCameraPositionToPin()
+                        showMoveCameraButton = false
                     }
                 }
+                .shadow(color: .gray.opacity(0.3), radius: 5, y: 10)
+                .onChange(of: adress) { newValue in
+                    showMoveCameraButton = !newValue.isEmpty
+                }
+            moveCameraButton
         }
-        
+    }
+    
+    @ViewBuilder
+    private var clearAdressButton: some View {
+        if !adress.isEmpty {
+            Button {
+                adress = ""
+                showMoveCameraButton = false
+            } label: {
+                Image(systemName: "x.circle")
+            }
+            .foregroundStyle(.red)
+            .padding()
+        }
+    }
+    
+    @ViewBuilder
+    private var moveCameraButton: some View {
+        if showMoveCameraButton {
+            Button {
+                showMoveCameraButton.toggle()
+                Task {
+                    self.userPinnedLocation = await getCoordinates(from: adress)
+                    moveCameraPositionToPin()
+                }
+            } label: {
+                Text("移動する")
+                    .padding()
+                    .background(.thinMaterial)
+                    .foregroundStyle(.black)
+                    .cornerRadius(30)
+                    .shadow(color: .gray.opacity(0.3), radius: 5, y: 10)
+                    .transition(.opacity)
+            }
+        }
     }
     
     
