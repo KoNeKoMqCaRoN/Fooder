@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ConfirmationView: View {
-    
     @Binding var selectedImages: [UIImage]
     @Binding var foodName: String
     @Binding var selectedAllergens: Set<Allergen>
@@ -55,7 +54,7 @@ struct ConfirmationView: View {
                         .foregroundColor(.primary)
                     
                     ConfirmationRow(title: "食べ物名", value: foodName)
-                    ConfirmationRow(title: "カテゴリー", value: selectedFoodCategory.rawValue)
+                    ConfirmationRow(title: "カテゴリー", value: selectedFoodCategory.japaneseName)
                     ConfirmationRow(title: "数量", value: "\(amount) \(unit)")
                     
                     if !selectedAllergens.isEmpty {
