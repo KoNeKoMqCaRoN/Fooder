@@ -19,28 +19,28 @@ struct DonationSheetView: View {
             
             VStack (alignment: .leading) {
                 
-                section("写真", required: true, fieldType: .image) {
+                CustomSectionView("写真", required: true, fieldType: .image) {
                     ImagePickerScrollView(selectedImages: $vm.selectedImages)
                 }
                 
-                section("食材名", required: true, fieldType: .foodName) {
+                CustomSectionView("食材名", required: true, fieldType: .foodName) {
                     customTextField("例：りんご", text: $vm.foodName)
                 }
                 
                 HStack {
-                    section("数量", required: true, fieldType: .amount) {
+                    CustomSectionView("数量", required: true, fieldType: .amount) {
                         customTextField("例：4", text: $vm.amount, keyboardType: .numberPad)
                     }
                     
-                    section("単位", required: true, fieldType: .unit) {
+                    CustomSectionView("単位", required: true, fieldType: .unit) {
                         customTextField("例：個", text: $vm.unit)
                     }
                 }
-                section("カテゴリー", fieldType: .foodCategory) {
+                CustomSectionView("カテゴリー", fieldType: .foodCategory) {
                     categoryMenu
                 }
                 
-                section("受け渡し場所", required: true, fieldType: .adress) {
+                CustomSectionView("受け渡し場所", required: true, fieldType: .adress) {
                     TextFieldWithMapPickerView(
                         adress: $vm.adress,
                         lat: $vm.lat,
@@ -49,7 +49,7 @@ struct DonationSheetView: View {
                     )
                 }
                 
-                section("連絡先", required: true, fieldType: .phoneNumber) {
+                CustomSectionView("連絡先", required: true, fieldType: .phoneNumber) {
                     customTextField("例：01234213411", text: $vm.phoneNumber, keyboardType: .phonePad)
                 } comment: {
                     Text("※ハイパンなしで記入してください")
@@ -59,11 +59,11 @@ struct DonationSheetView: View {
                 }
                 .padding(.bottom)
                 
-                section("アレルゲン情報", required: true, fieldType: .allergens) {
+                CustomSectionView("アレルゲン情報", required: true, fieldType: .allergens) {
                     AllergensPickerView(selectedAllergens: $vm.selectedAllergens)
                 }
                 
-                section("コメント", fieldType: .comment) {
+                CustomSectionView("コメント", fieldType: .comment) {
                     commentTextField
                 }
                 
@@ -169,40 +169,6 @@ extension DonationSheetView {
         
     }
     
-    private func section(
-        _ title: String,
-        required: Bool = false,
-        fieldType: InputField,
-        @ViewBuilder content: () -> some View,
-        @ViewBuilder comment: () -> some View = { EmptyView() }
-    ) -> some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text(title)
-                    .font(.headline)
-                if required {
-                    Text("*")
-                        .foregroundColor(.red)
-                }
-                
-                if vm.formValidateResult == .invalidField(fieldType) {
-                    Text("正しくありません。")
-                        .font(.caption)
-                        .foregroundStyle(.red)
-                }
-            }
-            .padding(3)
-            .background(
-                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.red, lineWidth: 1)
-                    .opacity(vm.formValidateResult == .invalidField(fieldType) ? 1 : 0)
-            )
-            
-            content()
-            comment()
-        }
-    }
-    
     private var categoryMenu: some View {
         Menu {
             ForEach(FoodCategory.allCases, id: \.self) { category in
@@ -232,6 +198,9 @@ extension DonationSheetView {
         }
     }
 }
+
+
+
 
 #Preview {
     DonationSheetView()
