@@ -6,7 +6,8 @@
 //
 
 import Foundation
-
+import UIKit
+import MapKit
 
 class DonationSheetViewModel: ObservableObject {
     @Published var selectedImages: [UIImage] = []
