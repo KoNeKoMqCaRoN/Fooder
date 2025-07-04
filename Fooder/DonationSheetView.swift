@@ -9,6 +9,23 @@ import SwiftUI
 import PhotosUI
 
 
+enum FormValidateResult {
+    case valid
+    case invalidField(_ field: InputField)
+}
+
+enum InputField {
+    case image
+    case foodName
+    case amount
+    case unit
+    case foodCategory
+    case adress
+    case phoneNumber
+    case comment
+}
+
+
 class DonationSheetViewModel: ObservableObject {
     @Published var selectedImages: [UIImage] = []
     @Published var foodName: String = ""
@@ -21,6 +38,77 @@ class DonationSheetViewModel: ObservableObject {
     @Published var lat: Double = 0.0
     @Published var lng: Double = 0.0
     @Published var comment: String = ""
+    
+    
+    
+}
+
+// helper methods
+extension DonationSheetViewModel {
+    // 入力された値が正しいかを検証する
+    private func checkValidity() async -> FormValidateResult {
+        
+        // 画像チェック
+        guard !selectedImages.isEmpty else {
+            return .invalidField(.image)
+        }
+        
+        // 食品名チェック
+        guard !foodName.isEmpty else {
+            return .invalidField(.foodName)
+        }
+        
+        // 数量チェック（IntまたはDouble）
+        guard !amount.isEmpty else {
+            return .invalidField(.amount)
+        }
+        guard Double(amount) != nil else {
+            return .invalidField(.amount)
+        }
+        
+        // 単位チェック
+        guard !unit.isEmpty else {
+            return .invalidField(.unit)
+        }
+        
+        // 住所チェックと座標取得
+        guard !adress.isEmpty else {
+            return .invalidField(.adress)
+        }
+        guard let coordinates = await getCoordinates(from: adress) else {
+            return .invalidField(.adress)
+        }
+        lat = coordinates.latitude
+        lng = coordinates.longitude
+        
+        // 電話番号チェック（11桁の数字）
+        guard !phoneNumber.isEmpty,
+              phoneNumber.count == 11,
+              Int(phoneNumber) != nil else {
+            return .invalidField(.phoneNumber)
+        }
+        
+        return .valid
+    }
+
+    
+    
+    private func getCoordinates(from adress: String) async -> CLLocationCoordinate2D? {
+        var coordinate: CLLocationCoordinate2D?
+        let geocoder = CLGeocoder()
+        do {
+            let placemarks = try await geocoder.geocodeAddressString(adress)
+            if let placemark = placemarks.first {
+                if let coord = placemark.location?.coordinate {
+                    coordinate = coord
+                }
+            }
+        } catch {
+            print("経度、緯度取得に失敗しました。\(error.localizedDescription)")
+        }
+       
+        return coordinate
+    }
 }
 
 
