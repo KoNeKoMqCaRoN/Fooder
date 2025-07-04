@@ -84,7 +84,8 @@ extension DonationSheetViewModel {
         guard let coordinates = await getCoordinates(from: adress) else {
             return .invalidField(.adress)
         }
-        DispatchQueue.main.async {
+        
+        await MainActor.run {
             self.lat = coordinates.latitude
             self.lng = coordinates.longitude
         }

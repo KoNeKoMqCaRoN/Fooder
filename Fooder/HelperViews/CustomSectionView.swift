@@ -10,7 +10,6 @@ import SwiftUI
 struct CustomSectionView<Content: View, Comment: View>: View {
     var title: String
     var required: Bool
-    var fieldType: InputField
     var showWrongInputError: Bool = false
     var content: () -> Content
     var comment: () -> Comment
@@ -18,13 +17,13 @@ struct CustomSectionView<Content: View, Comment: View>: View {
     init(
         _ title: String,
         required: Bool = false,
-        fieldType: InputField,
+        showWrongInputError: Bool = false,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder comment: @escaping () -> Comment = { EmptyView() }
     ) {
         self.title = title
         self.required = required
-        self.fieldType = fieldType
+        self.showWrongInputError = showWrongInputError
         self.content = content
         self.comment = comment
     }

@@ -19,28 +19,29 @@ struct DonationSheetView: View {
             
             VStack (alignment: .leading) {
                 
-                CustomSectionView("写真", required: true, fieldType: .image) {
+                CustomSectionView("写真", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.image)) {
                     ImagePickerScrollView(selectedImages: $vm.selectedImages)
                 }
                 
-                CustomSectionView("食材名", required: true, fieldType: .foodName) {
-                    customTextField("例：りんご", text: $vm.foodName)
+                CustomSectionView("食材名", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.foodName)) {
+                    CustomTextFieldView("例：りんご", text: $vm.foodName)
                 }
                 
                 HStack {
-                    CustomSectionView("数量", required: true, fieldType: .amount) {
-                        customTextField("例：4", text: $vm.amount, keyboardType: .numberPad)
+                    CustomSectionView("数量", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.amount)) {
+                        CustomTextFieldView("例：4", text: $vm.amount, keyboardType: .numberPad)
                     }
                     
-                    CustomSectionView("単位", required: true, fieldType: .unit) {
-                        customTextField("例：個", text: $vm.unit)
+                    CustomSectionView("単位", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.unit)) {
+                        CustomTextFieldView("例：個", text: $vm.unit)
                     }
                 }
-                CustomSectionView("カテゴリー", fieldType: .foodCategory) {
-                    categoryMenu
+                
+                CustomSectionView("カテゴリー") {
+                    CategoryMenuView(selectedFoodCategory: $vm.selectedFoodCategory)
                 }
                 
-                CustomSectionView("受け渡し場所", required: true, fieldType: .adress) {
+                CustomSectionView("受け渡し場所", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.adress)) {
                     TextFieldWithMapPickerView(
                         adress: $vm.adress,
                         lat: $vm.lat,
@@ -49,8 +50,8 @@ struct DonationSheetView: View {
                     )
                 }
                 
-                CustomSectionView("連絡先", required: true, fieldType: .phoneNumber) {
-                    customTextField("例：01234213411", text: $vm.phoneNumber, keyboardType: .phonePad)
+                CustomSectionView("連絡先", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.phoneNumber)) {
+                    CustomTextFieldView("例：01234213411", text: $vm.phoneNumber, keyboardType: .phonePad)
                 } comment: {
                     Text("※ハイパンなしで記入してください")
                         .font(.caption)
@@ -59,148 +60,39 @@ struct DonationSheetView: View {
                 }
                 .padding(.bottom)
                 
-                CustomSectionView("アレルゲン情報", required: true, fieldType: .allergens) {
+                CustomSectionView("アレルゲン情報", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.allergens)) {
                     AllergensPickerView(selectedAllergens: $vm.selectedAllergens)
                 }
                 
-                CustomSectionView("コメント", fieldType: .comment) {
-                    commentTextField
+                CustomSectionView("コメント") {
+                    CustomCommentFieldView(comment: $vm.comment)
                 }
                 
-                if vm.formValidateResult != .valid {
-                    Text("入力ミスがあります。")
-                        .foregroundStyle(.red)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .font(.caption)
-                        .padding(.vertical)
-                }
-                                
-                Button {
+                ConfirmAndCancelButtonView(showErrorMessage: vm.formValidateResult != .valid, confirmButtonAction: {
                     Task {
                         if await vm.formIsValid() {
                             showConfirmationView = true
                         }
                     }
-                } label: {
-                    Text("確認画面に移動する")
-                        .font(.headline)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 55)
-                        .background(.green)
-                        .foregroundStyle(.white)
-                        .cornerRadius(10)
-                        .padding(.vertical)
+                })
+                .navigationDestination(isPresented: $showConfirmationView) {
+                    ConfirmationView(selectedImages: $vm.selectedImages, foodName: $vm.foodName, selectedAllergens: $vm.selectedAllergens, amount: $vm.amount, unit: $vm.unit, selectedFoodCategory: $vm.selectedFoodCategory, adress: $vm.adress, phoneNumber: $vm.phoneNumber, comment: $vm.comment
+                                     ,submit: {
+                        Task {
+                            if await vm.submit() { // 送信成功したら、Sheetを閉じる
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }
+                    })
                 }
-                
-                
-                cancelButton
-                
-                
             }
             .padding(.horizontal)
             .navigationTitle("寄付する")
             .foregroundStyle(.black)
         }
         .background(.white)
-        .navigationDestination(isPresented: $showConfirmationView) {
-            ConfirmationView(selectedImages: $vm.selectedImages, foodName: $vm.foodName, selectedAllergens: $vm.selectedAllergens, amount: $vm.amount, unit: $vm.unit, selectedFoodCategory: $vm.selectedFoodCategory, adress: $vm.adress, phoneNumber: $vm.phoneNumber, comment: $vm.comment
-                             ,submit: {
-                Task {
-                    if await vm.submit() { // 送信成功したら、Sheetを閉じる
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                }
-            })
-        }
     }
 }
-
-extension DonationSheetView {
-    private var cancelButton: some View {
-        Button {
-            presentationMode.wrappedValue.dismiss()
-        } label: {
-            Text("キャンセルする")
-                .frame(maxWidth: .infinity, alignment: .center)
-                .foregroundStyle(.red)
-                .font(.headline)
-                .padding(.vertical)
-        }
-    }
-    
-    @ViewBuilder
-    private func customTextField(
-        _ placeholder: String,
-        text: Binding<String>,
-        keyboardType: UIKeyboardType = .default
-    ) -> some View {
-        
-        TextField(placeholder, text: text)
-            .keyboardType(keyboardType)
-            .padding()
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(style: StrokeStyle(lineWidth: 3))
-                    .foregroundStyle(.gray.opacity(0.1))
-            )
-    }
-    
-    @ViewBuilder
-    private var commentTextField: some View {
-        ZStack(alignment: .topLeading) {
-            
-            TextEditor(text: $vm.comment)
-                .padding(4)
-                .background(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
-                )
-            
-            if vm.comment.isEmpty {
-                Text("コメントを入力してください...")
-                    .foregroundColor(.gray)
-                    .padding(8)
-            }
-            
-        }
-        .frame(height: 150)
-        
-    }
-    
-    private var categoryMenu: some View {
-        Menu {
-            ForEach(FoodCategory.allCases, id: \.self) { category in
-                Button {
-                    vm.selectedFoodCategory = category
-                } label: {
-                    Text(category.japaneseName)
-                        .bold()
-                }
-            }
-        } label: {
-            HStack {
-                Text(vm.selectedFoodCategory.japaneseName)
-                Spacer()
-                Image(systemName: "arrow.up.and.down")
-                    .foregroundStyle(.green)
-            }
-            .padding(.horizontal)
-            .frame(maxWidth: .infinity)
-            .frame(height: 55)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(style: StrokeStyle(lineWidth: 2))
-                    .foregroundStyle(.gray.opacity(0.2))
-            )
-            
-        }
-    }
-}
-
-
-
 
 #Preview {
     DonationSheetView()
