@@ -33,6 +33,8 @@ struct Donation: Identifiable {
 
 struct ContentView: View {
     @State private var showDonationSheetView: Bool = false
+    @State private var showRequestSheetView: Bool = false
+
    let donataions: [Donation] = [
       Donation(id: UUID().uuidString, name: "レタス", recieved: true),
        Donation(id: UUID().uuidString, name: "トマト", recieved: true),
@@ -59,6 +61,11 @@ struct ContentView: View {
          
          donateList
       }
+      .fullScreenCover(isPresented: $showRequestSheetView, content: {
+          NavigationStack {
+              RequestSheetView()
+          }
+      })
       .fullScreenCover(isPresented: $showDonationSheetView, content: {
           NavigationStack {
               DonationSheetView()
@@ -124,7 +131,7 @@ extension ContentView {
          Spacer()
          
          Button {
-            // action
+             showRequestSheetView.toggle()
          } label: {
             VStack {
                Image(systemName: "magnifyingglass")
