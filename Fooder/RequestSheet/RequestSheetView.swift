@@ -1,28 +1,21 @@
 //
-//  DonationSheetView.swift
+//  RequestSheetView.swift
 //  Fooder
 //
-//  Created by cmStudent on 2025/07/02.
+//  Created by cmStudent on 2025/07/04.
 //
 
 import SwiftUI
-import PhotosUI
+import MapKit
 
-
-struct DonationSheetView: View {
+struct RequestSheetView: View {
     @Environment(\.presentationMode) private var presentationMode
-    @StateObject private var vm: DonationSheetViewModel = DonationSheetViewModel()
-    @State private var showConfirmationView: Bool = false
+    @State private var showConfirmationView = false
+    @StateObject private var vm: RequestSheetViewModel = RequestSheetViewModel()
     
     var body: some View {
         ScrollView {
-            
-            VStack (alignment: .leading) {
-                
-                CustomSectionView("写真", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.image)) {
-                    ImagePickerScrollView(selectedImages: $vm.selectedImages)
-                }
-                
+            VStack {
                 CustomSectionView("食材名", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.foodName)) {
                     CustomTextFieldView("例：りんご", text: $vm.foodName)
                 }
@@ -37,8 +30,12 @@ struct DonationSheetView: View {
                     }
                 }
                 
-                CustomSectionView("カテゴリー") {
-                    CategoryMenuView(selectedFoodCategory: $vm.selectedFoodCategory)
+                CustomSectionView("優先度", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.priority)) {
+                    PriorityPickerView(selectedPriority: $vm.selectedPriority, showUrgentPriority: $vm.showUrgentPriority)
+                } comment: {
+                    Text("高：当日中の寄付が必要")
+                        .font(.caption)
+                        .foregroundStyle(.gray)
                 }
                 
                 CustomSectionView("受け渡し場所", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.adress)) {
@@ -59,11 +56,7 @@ struct DonationSheetView: View {
                         .foregroundColor(.gray)
                 }
                 .padding(.bottom)
-                
-                CustomSectionView("アレルゲン情報", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.allergens)) {
-                    AllergensPickerView(selectedAllergens: $vm.selectedAllergens)
-                }
-                
+
                 CustomSectionView("コメント") {
                     CustomCommentFieldView(comment: $vm.comment)
                 }
@@ -76,8 +69,16 @@ struct DonationSheetView: View {
                     }
                 })
                 .navigationDestination(isPresented: $showConfirmationView) {
-                    ConfirmationView(selectedImages: $vm.selectedImages, foodName: $vm.foodName, selectedAllergens: $vm.selectedAllergens, amount: $vm.amount, unit: $vm.unit, selectedFoodCategory: $vm.selectedFoodCategory, adress: $vm.adress, phoneNumber: $vm.phoneNumber, comment: $vm.comment
-                                     ,submit: {
+                    ConfirmationView(
+                        foodName: $vm.foodName,
+                        amount: $vm.amount,
+                        unit: $vm.unit,
+                        selectedFoodCategory: $vm.selectedFoodCategory,
+                        selectedPriority: $vm.selectedPriority,
+                        adress: $vm.adress,
+                        phoneNumber: $vm.phoneNumber,
+                        comment: $vm.comment,
+                        submit: {
                         Task {
                             if await vm.submit() { // 送信成功したら、Sheetを閉じる
                                 presentationMode.wrappedValue.dismiss()
@@ -85,15 +86,18 @@ struct DonationSheetView: View {
                         }
                     })
                 }
+
             }
-            .padding(.horizontal)
-            .navigationTitle("寄付する")
-            .foregroundStyle(.black)
+            .padding()
         }
+        .navigationTitle("リクエスト")
         .background(.white)
+        .foregroundStyle(.black)
     }
 }
 
 #Preview {
-    DonationSheetView()
+    NavigationStack {
+        RequestSheetView()
+    }
 }

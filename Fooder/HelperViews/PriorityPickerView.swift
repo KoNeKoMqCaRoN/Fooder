@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PriorityPickerView: View {
-    @Binding var selectedPriority: Priority
+    @Binding var selectedPriority: Priority?
     @Binding var showUrgentPriority: Bool
     
     private var visiblePriorities: [Priority] {
@@ -83,7 +83,7 @@ struct PriorityPickerView: View {
 
 #Preview {
     @Previewable
-    @State var selectedPriority: Priority = .low
+    @State var selectedPriority: Priority? = nil
     @Previewable
     @State var showUrgentPriority: Bool = true
     PriorityPickerView(selectedPriority: $selectedPriority, showUrgentPriority: $showUrgentPriority)

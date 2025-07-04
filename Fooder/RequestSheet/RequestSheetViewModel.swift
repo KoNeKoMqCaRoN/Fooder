@@ -1,18 +1,16 @@
 //
-//  DonationSheetViewModel.swift
+//  RequestSheetViewModel.swift
 //  Fooder
 //
 //  Created by cmStudent on 2025/07/04.
 //
 
-import Foundation
-import UIKit
+
+import SwiftUI
 import MapKit
 
-class DonationSheetViewModel: ObservableObject {
-    @Published var selectedImages: [UIImage] = []
+class RequestSheetViewModel: ObservableObject {
     @Published var foodName: String = ""
-    @Published var selectedAllergens: Set<Allergen> = []
     @Published var amount: String = ""
     @Published var unit: String = ""
     @Published var selectedFoodCategory: FoodCategory = .others
@@ -22,7 +20,11 @@ class DonationSheetViewModel: ObservableObject {
     @Published var lng: Double = 0.0
     @Published var comment: String = ""
     
+    @Published var selectedPriority: Priority? = nil
+    @Published var showUrgentPriority: Bool = false // 災害地域以内だったらTrueにする
+    
     @Published var formValidateResult: FormValidateResult = .valid
+    
     
     /// フォームの送信処理を行う関数。
     ///
@@ -39,11 +41,10 @@ class DonationSheetViewModel: ObservableObject {
     }
 
     
-   
 }
 
 // helper methods
-extension DonationSheetViewModel {
+extension RequestSheetViewModel {
     
     // 入力された値が正しいかを検証する
     @MainActor
@@ -53,12 +54,7 @@ extension DonationSheetViewModel {
     }
     
     private func getValidateResult() async -> FormValidateResult {
-        
-        // 画像チェック
-        guard !selectedImages.isEmpty else {
-            return .invalidField(.image)
-        }
-        
+                
         // 食品名チェック
         guard !foodName.isEmpty else {
             return .invalidField(.foodName)
@@ -77,10 +73,15 @@ extension DonationSheetViewModel {
             return .invalidField(.unit)
         }
         
+        guard selectedPriority != nil else {
+            return .invalidField(.priority)
+        }
+        
         // 住所チェックと座標取得
         guard !adress.isEmpty else {
             return .invalidField(.adress)
         }
+        
         guard let coordinates = await getCoordinates(from: adress) else {
             return .invalidField(.adress)
         }
@@ -89,13 +90,6 @@ extension DonationSheetViewModel {
             self.lat = coordinates.latitude
             self.lng = coordinates.longitude
         }
-        
-        
-        //　アレルゲンの選択チェック
-        guard !selectedAllergens.isEmpty else {
-            return .invalidField(.allergens)
-        }
-        
         
         // 電話番号チェック（11桁の数字）
         guard !phoneNumber.isEmpty,

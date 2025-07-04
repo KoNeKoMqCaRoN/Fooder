@@ -11,15 +11,43 @@ struct ConfirmationView: View {
     @Binding var selectedImages: [UIImage]
     @Binding var foodName: String
     @Binding var selectedAllergens: Set<Allergen>
+    @Binding var selectedPriority: Priority?
     @Binding var amount: String
     @Binding var unit: String
     @Binding var selectedFoodCategory: FoodCategory
     @Binding var adress: String
     @Binding var phoneNumber: String
     @Binding var comment: String
-    
+
     // 確定ボタンを押した時の処理
     var submit: () -> Void
+
+    init(
+        selectedImages: Binding<[UIImage]> = .constant([]),
+        foodName: Binding<String>,
+        selectedAllergens: Binding<Set<Allergen>> = .constant([]),
+        amount: Binding<String>,
+        unit: Binding<String>,
+        selectedFoodCategory: Binding<FoodCategory>,
+        selectedPriority: Binding<Priority?> = .constant(nil),
+        adress: Binding<String>,
+        phoneNumber: Binding<String>,
+        comment: Binding<String>,
+        submit: @escaping () -> Void
+    ) {
+        self._selectedImages = selectedImages
+        self._foodName = foodName
+        self._selectedAllergens = selectedAllergens
+        self._amount = amount
+        self._unit = unit
+        self._selectedFoodCategory = selectedFoodCategory
+        self._adress = adress
+        self._phoneNumber = phoneNumber
+        self._comment = comment
+        self.submit = submit
+        self._selectedPriority = selectedPriority
+    }
+
     
     var body: some View {
         ScrollView {
@@ -41,10 +69,8 @@ struct ConfirmationView: View {
                                         .clipShape(RoundedRectangle(cornerRadius: 10))
                                 }
                             }
-                            .padding(.horizontal)
                         }
                     }
-                    .padding(.horizontal)
                 }
                 
                 // 基本情報セクション
@@ -79,10 +105,27 @@ struct ConfirmationView: View {
                         }
                     }
                 }
-                .padding(.horizontal)
+                
+                if let selectedPriority {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("優先度")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        
+                        
+                        Text(selectedPriority.japaneseString)
+                            .padding()
+                            .padding(.horizontal)
+                            .font(.subheadline)
+                            .fontWeight(.heavy)
+                            .background(selectedPriority.color)
+                            .cornerRadius(30)
+                            .foregroundStyle(.white)
+                    }
+
+                }
                 
                 Divider()
-                    .padding(.horizontal)
                 
                 // 場所情報セクション
                 VStack(alignment: .leading, spacing: 15) {
@@ -93,11 +136,9 @@ struct ConfirmationView: View {
                     ConfirmationRow(title: "住所", value: adress)
                     ConfirmationRow(title: "電話番号", value: phoneNumber)
                 }
-                .padding(.horizontal)
                 
                 if !comment.isEmpty {
                     Divider()
-                        .padding(.horizontal)
                     
                     // コメントセクション
                     VStack(alignment: .leading, spacing: 10) {
@@ -112,7 +153,6 @@ struct ConfirmationView: View {
                             .background(Color.gray.opacity(0.1))
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
-                    .padding(.horizontal)
                 }
                 
                 
@@ -127,10 +167,10 @@ struct ConfirmationView: View {
                         .background(.green)
                         .foregroundStyle(.white)
                         .cornerRadius(10)
-                        .padding()
+                        .padding(.vertical)
                 }
             }
-            .padding(.vertical)
+            .padding()
         }
         .navigationTitle("確認")
         
@@ -174,6 +214,7 @@ struct ConfirmationRow: View {
             amount: $amount,
             unit: $unit,
             selectedFoodCategory: $selectedFoodCategory,
+            selectedPriority: .constant(.urgent),
             adress: $adress,
             phoneNumber: $phoneNumber,
             comment: $comment) {
