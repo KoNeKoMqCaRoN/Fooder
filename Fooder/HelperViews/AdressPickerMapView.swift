@@ -77,7 +77,9 @@ struct AdressPickerMapView: View {
                     Task {
                         self.userPinnedLocation = await getCoordinates(from: adress)
                         moveCameraPositionToPin()
-                        showMoveCameraButton = false
+                        withAnimation(.bouncy) {
+                            showMoveCameraButton = false
+                        }
                     }
                 }
                 .shadow(color: .gray.opacity(0.3), radius: 5, y: 10)
@@ -93,7 +95,9 @@ struct AdressPickerMapView: View {
         if !adress.isEmpty {
             Button {
                 adress = ""
-                showMoveCameraButton = false
+                withAnimation(.bouncy) {
+                    showMoveCameraButton = false
+                }
             } label: {
                 Image(systemName: "x.circle")
             }
@@ -106,7 +110,9 @@ struct AdressPickerMapView: View {
     private var moveCameraButton: some View {
         if showMoveCameraButton {
             Button {
-                showMoveCameraButton.toggle()
+                withAnimation(.bouncy) {
+                    showMoveCameraButton = false
+                }
                 Task {
                     self.userPinnedLocation = await getCoordinates(from: adress)
                     moveCameraPositionToPin()
@@ -118,7 +124,7 @@ struct AdressPickerMapView: View {
                     .foregroundStyle(.black)
                     .cornerRadius(30)
                     .shadow(color: .gray.opacity(0.3), radius: 5, y: 10)
-                    .transition(.opacity)
+                    .transition(.scale)
             }
         }
     }
