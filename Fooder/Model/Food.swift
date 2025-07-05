@@ -53,4 +53,13 @@ struct Food: Codable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
+    
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name, category, quantity, unit, allergens, adress, lat, lng, comment
+        case expirationDate = "expiration_date"
+        case imageURLs = "image_urls"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
 }
