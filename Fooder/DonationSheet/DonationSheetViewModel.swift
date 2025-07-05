@@ -21,6 +21,7 @@ class DonationSheetViewModel: ObservableObject {
     @Published var lat: Double = 0.0
     @Published var lng: Double = 0.0
     @Published var comment: String = ""
+    @Published var expirationDate: Date = .now
     
     @Published var formValidateResult: FormValidateResult = .valid
     
