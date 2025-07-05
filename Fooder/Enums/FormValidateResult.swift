@@ -22,4 +22,5 @@ enum InputField {
     case allergens
     case comment
     case priority
+    case expirationDate
 }

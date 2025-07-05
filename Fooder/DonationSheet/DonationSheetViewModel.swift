@@ -21,6 +21,7 @@ class DonationSheetViewModel: ObservableObject {
     @Published var lat: Double = 0.0
     @Published var lng: Double = 0.0
     @Published var comment: String = ""
+    @Published var expirationDate: Date = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
     
     @Published var formValidateResult: FormValidateResult = .valid
     
@@ -75,6 +76,11 @@ extension DonationSheetViewModel {
         // 単位チェック
         guard !unit.isEmpty else {
             return .invalidField(.unit)
+        }
+        
+        
+        guard expirationDate.timeIntervalSince1970 > Date().timeIntervalSince1970 else {
+            return .invalidField(.expirationDate)
         }
         
         // 住所チェックと座標取得

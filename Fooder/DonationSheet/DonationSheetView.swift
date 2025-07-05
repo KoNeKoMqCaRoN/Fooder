@@ -37,6 +37,24 @@ struct DonationSheetView: View {
                     }
                 }
                 
+                CustomSectionView("賞味期限", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.expirationDate)) {
+                    CustomDatePickerView(selectedDate: $vm.expirationDate) {
+                        HStack {
+                            Text(vm.expirationDate, formatter: japaneseDateFormatter)
+                                .padding()
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 50)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(style: StrokeStyle(lineWidth: 3))
+                                .foregroundStyle(.gray.opacity(0.1))
+                        )
+                        
+                    }
+                }
+
+                
                 CustomSectionView("カテゴリー") {
                     CategoryMenuView(selectedFoodCategory: $vm.selectedFoodCategory)
                 }
@@ -92,6 +110,16 @@ struct DonationSheetView: View {
         }
         .background(.white)
     }
+    
+    private var japaneseDateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ja_JP")
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
+        return formatter
+    }
+
+    
 }
 
 #Preview {
