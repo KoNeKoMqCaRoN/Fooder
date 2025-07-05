@@ -1,0 +1,56 @@
+//
+//  Food.swift
+//  Fooder
+//
+//  Created by cmStudent on 2025/07/05.
+//
+
+import Foundation
+
+struct Food: Codable {
+    let id: String = UUID().uuidString
+    let name: String
+    let category: FoodCategory
+    let quantity: Double
+    let unit: String
+    let expirationDate: Date?
+    let allergens: [Allergen]
+    let imageURLs: [String]
+    let adress: String
+    let lat: Double
+    let lng: Double
+    let comment: String
+    let createdAt: Date
+    let updatedAt: Date
+    
+    
+    init(
+        name: String,
+        category: FoodCategory,
+        quantity: Double,
+        unit: String,
+        expirationDate: Date?,
+        allergens: [Allergen],
+        imageURLs: [String],
+        adress: String,
+        lat: Double,
+        lng: Double,
+        comment: String,
+        createdAt: Date = Date(),
+        updatedAt: Date = Date()
+    ) {
+        self.name = name
+        self.category = category
+        self.quantity = quantity
+        self.unit = unit
+        self.expirationDate = expirationDate
+        self.allergens = allergens
+        self.imageURLs = imageURLs
+        self.adress = adress
+        self.lat = lat
+        self.lng = lng
+        self.comment = comment
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+    }
+}
