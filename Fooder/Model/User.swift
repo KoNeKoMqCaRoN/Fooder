@@ -52,3 +52,21 @@ struct User: Codable {
         case updatedAt = "updated_at"
     }
 }
+
+
+// Dummy Data
+extension User {
+    static var dummy: User {
+        User(
+            email: "13jp01389@jic.pc.jo",
+            displayName: "山田太郎",
+            userName: "YamaDa TaRo",
+            avatarImageURL: "https://asiamedia.lmu.edu/wp-content/uploads/2016/10/piko-taro.jpg",
+            adress: "東京都新宿区百人町１−２５ー４",
+            phoneNumber: "00000000000",
+            isVerified: false,
+            createdAt: .now,
+            updatedAt: .now
+        )
+    }
+}
