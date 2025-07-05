@@ -41,13 +41,22 @@ struct DatePickerSheet: View {
     @Binding var selectedDate: Date
     let title: String
     @Environment(\.dismiss) private var dismiss
-    
-    // 明日からスタート
-    let dateRange: PartialRangeFrom<Date> = {
-        let calendar = Calendar.current
-        let startDate = calendar.date(byAdding: .day, value: 1, to: Date())!
-        return startDate...
-    }()
+    var dateRange: PartialRangeFrom<Date>
+        
+    init(
+        selectedDate: Binding<Date>,
+        title: String,
+        // デフォルト：　明日
+        dateRange: PartialRangeFrom<Date> = {
+            let calendar = Calendar.current
+            let startDate = calendar.date(byAdding: .day, value: 1, to: Date())!
+            return startDate...
+        }()
+    ) {
+        self._selectedDate = selectedDate
+        self.title = title
+        self.dateRange = dateRange
+    }
 
     var body: some View {
         NavigationView {
