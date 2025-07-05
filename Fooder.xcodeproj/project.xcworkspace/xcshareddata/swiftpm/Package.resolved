@@ -1,0 +1,15 @@
+{
+  "originHash" : "dc0fdd15defe4836ff8705a88d73d4b5ad15a759224cb3a3dd3f8a0017380b44",
+  "pins" : [
+    {
+      "identity" : "imageurlcreationswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hlum/ImageURLCreationSwift.git",
+      "state" : {
+        "revision" : "e8ca7c8716563c0ed5107c9c415ad16b3939cb01",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}
