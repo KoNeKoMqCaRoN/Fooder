@@ -42,12 +42,20 @@ struct DatePickerSheet: View {
     let title: String
     @Environment(\.dismiss) private var dismiss
     
+    // 明日からスタート
+    let dateRange: PartialRangeFrom<Date> = {
+        let calendar = Calendar.current
+        let startDate = calendar.date(byAdding: .day, value: 1, to: Date())!
+        return startDate...
+    }()
+
     var body: some View {
         NavigationView {
             VStack {
                 DatePicker(
                     title,
                     selection: $selectedDate,
+                    in: dateRange,
                     displayedComponents: .date
                 )
                 .datePickerStyle(.wheel)
