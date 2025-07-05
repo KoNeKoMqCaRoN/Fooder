@@ -45,3 +45,23 @@ struct Request: Codable {
         case updatedAt = "updated_at"
     }
 }
+
+
+// Dummy Data
+extension Request {
+    /// - Parameters:
+    ///   - requesterID: 寄付者のユーザーID（省略時は新しいUUID）
+    ///   - foodItemID: 使用する食品アイテムのID（省略時は新しいUUID）
+    /// - Returns: 初期化された `DonationModel` のダミーインスタンス
+    static func dummy(requesterID: String = UUID().uuidString, foodItemID: String = UUID().uuidString) -> Request {
+        return Request(
+            requesterID: requesterID,
+            foodItemID: foodItemID,
+            status: .open,
+            needBy: .tomorrow,
+            priority: .normal,
+            createdAt: .now,
+            updatedAt: .now
+        )
+    }
+}
