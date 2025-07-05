@@ -40,7 +40,7 @@ struct DonationSheetView: View {
                 CustomSectionView("賞味期限", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.expirationDate)) {
                     CustomDatePickerView(selectedDate: $vm.expirationDate) {
                         HStack {
-                            Text(vm.expirationDate, formatter: japaneseDateFormatter)
+                            Text(vm.expirationDate.japaneseDateString)
                                 .padding()
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -110,16 +110,6 @@ struct DonationSheetView: View {
         }
         .background(.white)
     }
-    
-    private var japaneseDateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ja_JP")
-        formatter.dateStyle = .short
-        formatter.timeStyle = .none
-        return formatter
-    }
-
-    
 }
 
 #Preview {
