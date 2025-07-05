@@ -66,7 +66,9 @@ struct Food: Codable {
 
 // Dummy Data
 extension Food {
-    static var dummy: Food {
+    static func dummy(
+        
+    ) -> Food {
         return Food(
             name: "モンスター",
             category: .beverages,

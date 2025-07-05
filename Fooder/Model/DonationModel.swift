@@ -51,19 +51,37 @@ struct DonationModel: Codable {
 
 
 // Dummy data
-extension DonationModel {
+extension Food {
     
-    /// - Parameters:
-    ///   - foodItemID: 使用する食品アイテムのID（省略時は新しいUUID）
-    ///   - donorID: 寄付者のユーザーID（省略時は新しいUUID）
-    /// - Returns: 初期化された `DonationModel` のダミーインスタンス
-    static func dummy(foodItemID: String = UUID().uuidString, donorID: String = UUID().uuidString) -> DonationModel {
-        return DonationModel(
-            donorID: donorID,
-            foodItemID: foodItemID,
-            pickUpStartTime: Date(),
-            pickUpEndTime: .tomorrow,
-            createdAt: .now,
-            updatedAt: .now
+    static func dummy(
+        name: String = "モンスター",
+        category: FoodCategory = .beverages,
+        quantity: Double = 100,
+        unit: String = "本",
+        expirationDate: Date? = nil,
+        allergens: [Allergen] = [.none],
+        imageURLs: [String] = [
+            "https://24cm0138.main.jp/ImgAPI/imgs/dummy_monster.jpeg",
+            "https://24cm0138.main.jp/ImgAPI/imgs/dummy_monster.jpeg",
+            "https://24cm0138.main.jp/ImgAPI/imgs/dummy_monster.jpeg"
+        ],
+        adress: String = "東京都新宿区百人町１−２５ー４",
+        lat: Double = 35.698224538523036,
+        lng: Double = 139.69824643966192,
+        comment: String = "二宮先生に買ってもらってください。"
+    ) -> Food {
+        return Food(
+            name: name,
+            category: category,
+            quantity: quantity,
+            unit: unit,
+            expirationDate: expirationDate,
+            allergens: allergens,
+            imageURLs: imageURLs,
+            adress: adress,
+            lat: lat,
+            lng: lng,
+            comment: comment
         )
-    }}
+    }
+}
