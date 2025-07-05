@@ -8,7 +8,7 @@
 import SwiftUI
 
 // Database に保存するときは、.rawValue で
-enum Priority: String, CaseIterable {
+enum Priority: String, Codable, CaseIterable {
     case low
     case normal
     case high

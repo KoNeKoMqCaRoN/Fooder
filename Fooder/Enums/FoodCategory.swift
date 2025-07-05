@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum FoodCategory: String, CaseIterable {
+enum FoodCategory: String, CaseIterable, Codable {
     case fruits
     case vegetables
     case meat
