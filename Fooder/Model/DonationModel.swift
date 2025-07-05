@@ -51,37 +51,22 @@ struct DonationModel: Codable {
 
 
 // Dummy data
-extension Food {
-    
+extension DonationModel {
     static func dummy(
-        name: String = "モンスター",
-        category: FoodCategory = .beverages,
-        quantity: Double = 100,
-        unit: String = "本",
-        expirationDate: Date? = nil,
-        allergens: [Allergen] = [.none],
-        imageURLs: [String] = [
-            "https://24cm0138.main.jp/ImgAPI/imgs/dummy_monster.jpeg",
-            "https://24cm0138.main.jp/ImgAPI/imgs/dummy_monster.jpeg",
-            "https://24cm0138.main.jp/ImgAPI/imgs/dummy_monster.jpeg"
-        ],
-        adress: String = "東京都新宿区百人町１−２５ー４",
-        lat: Double = 35.698224538523036,
-        lng: Double = 139.69824643966192,
-        comment: String = "二宮先生に買ってもらってください。"
-    ) -> Food {
-        return Food(
-            name: name,
-            category: category,
-            quantity: quantity,
-            unit: unit,
-            expirationDate: expirationDate,
-            allergens: allergens,
-            imageURLs: imageURLs,
-            adress: adress,
-            lat: lat,
-            lng: lng,
-            comment: comment
+        donorID: String = UUID().uuidString,
+        foodItemID: String = UUID().uuidString,
+        pickUpStartTime: Date = Date(),
+        pickUpEndTime: Date = .tomorrow,
+        createdAt: Date = .now,
+        updatedAt: Date = .now
+    ) -> DonationModel {
+        return DonationModel(
+            donorID: donorID,
+            foodItemID: foodItemID,
+            pickUpStartTime: pickUpStartTime,
+            pickUpEndTime: pickUpEndTime,
+            createdAt: createdAt,
+            updatedAt: updatedAt
         )
     }
 }
