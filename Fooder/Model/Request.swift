@@ -45,3 +45,27 @@ struct Request: Codable {
         case updatedAt = "updated_at"
     }
 }
+
+
+// Dummy Data
+extension Request {
+    static func dummy(
+        requesterID: String = UUID().uuidString,
+        foodItemID: String = UUID().uuidString,
+        status: RequestStatus = .open,
+        needBy: Date = .tomorrow,
+        priority: Priority = .normal,
+        createdAt: Date = .now,
+        updatedAt: Date = .now
+    ) -> Request {
+        return Request(
+            requesterID: requesterID,
+            foodItemID: foodItemID,
+            status: status,
+            needBy: needBy,
+            priority: priority,
+            createdAt: createdAt,
+            updatedAt: updatedAt
+        )
+    }
+}

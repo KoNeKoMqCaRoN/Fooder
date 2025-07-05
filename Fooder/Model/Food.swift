@@ -63,3 +63,28 @@ struct Food: Codable {
         case updatedAt = "updated_at"
     }
 }
+
+// Dummy Data
+extension Food {
+    static func dummy(
+        
+    ) -> Food {
+        return Food(
+            name: "モンスター",
+            category: .beverages,
+            quantity: 100,
+            unit: "本",
+            expirationDate: nil,
+            allergens: [.none],
+            imageURLs: [
+                "https://24cm0138.main.jp/ImgAPI/imgs/dummy_monster.jpeg",
+                "https://24cm0138.main.jp/ImgAPI/imgs/dummy_monster.jpeg",
+                "https://24cm0138.main.jp/ImgAPI/imgs/dummy_monster.jpeg"
+            ],
+            adress: "東京都新宿区百人町１−２５ー４",
+            lat: 35.698224538523036,
+            lng: 139.69824643966192,
+            comment: "二宮先生に買ってもらってください。"
+        )
+    }
+}

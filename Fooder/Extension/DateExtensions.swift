@@ -12,4 +12,9 @@ extension Date {
         formatter.dateFormat = "yyyy年MM月dd日"
         return formatter.string(from: self)
     }
+    
+    static var tomorrow: Date {
+        return Calendar.current.date(byAdding: .day, value: 1, to: .now)!
+    }
+
 }

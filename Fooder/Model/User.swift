@@ -52,3 +52,31 @@ struct User: Codable {
         case updatedAt = "updated_at"
     }
 }
+
+
+// Dummy Data
+extension User {
+    static func dummy(
+        email: String = "13jp01389@jic.pc.jo",
+        displayName: String = "山田太郎",
+        userName: String = "YamaDa TaRo",
+        avatarImageURL: String = "https://asiamedia.lmu.edu/wp-content/uploads/2016/10/piko-taro.jpg",
+        adress: String = "東京都新宿区百人町１−２５ー４",
+        phoneNumber: String = "00000000000",
+        isVerified: Bool = false,
+        createdAt: Date = .now,
+        updatedAt: Date = .now
+    ) -> User {
+        return User(
+            email: email,
+            displayName: displayName,
+            userName: userName,
+            avatarImageURL: avatarImageURL,
+            adress: adress,
+            phoneNumber: phoneNumber,
+            isVerified: isVerified,
+            createdAt: createdAt,
+            updatedAt: updatedAt
+        )
+    }
+}
