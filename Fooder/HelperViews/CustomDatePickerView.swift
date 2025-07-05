@@ -12,15 +12,25 @@ struct CustomDatePickerView<Content: View>: View {
     
     var title: String
     @Binding var selectedDate: Date
+    
+    // デフォルト：　明日
+    var dateRange: PartialRangeFrom<Date>
+    
     var label: () -> Content
     
     init(
         title: String = "",
         selectedDate: Binding<Date>,
+        dateRange: PartialRangeFrom<Date> = {
+            let calendar = Calendar.current
+            let startDate = calendar.date(byAdding: .day, value: 1, to: Date())!
+            return startDate...
+        }(),
         @ViewBuilder label: @escaping () -> Content
     ) {
         self.title = title
         self._selectedDate = selectedDate
+        self.dateRange = dateRange
         self.label = label
     }
     
@@ -31,7 +41,7 @@ struct CustomDatePickerView<Content: View>: View {
                 showingPicker.toggle()
             }
             .sheet(isPresented: $showingPicker) {
-                DatePickerSheet(selectedDate: $selectedDate, title: title)
+                DatePickerSheet(selectedDate: $selectedDate, title: title, dateRange: dateRange)
                     .presentationDetents([.height(250)])
             }
     }

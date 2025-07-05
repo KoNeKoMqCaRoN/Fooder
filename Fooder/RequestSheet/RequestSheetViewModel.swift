@@ -74,6 +74,11 @@ extension RequestSheetViewModel {
             return .invalidField(.unit)
         }
         
+        // 〆切の日が今日からで
+        guard needBy.timeIntervalSince1970 >= Date().timeIntervalSince1970 else {
+            return .invalidField(.needBy)
+        }
+        
         guard selectedPriority != nil else {
             return .invalidField(.priority)
         }
