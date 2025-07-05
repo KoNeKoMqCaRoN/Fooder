@@ -14,6 +14,7 @@ class RequestSheetViewModel: ObservableObject {
     @Published var amount: String = ""
     @Published var unit: String = ""
     @Published var selectedFoodCategory: FoodCategory = .others
+    @Published var needBy: Date = Date()
     @Published var adress: String = ""
     @Published var phoneNumber: String = ""
     @Published var lat: Double = 0.0
@@ -71,6 +72,11 @@ extension RequestSheetViewModel {
         // 単位チェック
         guard !unit.isEmpty else {
             return .invalidField(.unit)
+        }
+        
+        // 〆切の日が今日からで
+        guard needBy.timeIntervalSince1970 >= Date().timeIntervalSince1970 else {
+            return .invalidField(.needBy)
         }
         
         guard selectedPriority != nil else {

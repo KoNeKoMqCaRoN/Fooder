@@ -38,6 +38,31 @@ struct RequestSheetView: View {
                         .foregroundStyle(.gray)
                 }
                 
+                CustomSectionView("〆切", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.needBy)) {
+                    
+                    let range: PartialRangeFrom<Date> = Date()...
+                    
+                    CustomDatePickerView(selectedDate: $vm.needBy, dateRange: range) {
+                        HStack {
+                            Text(vm.needBy.japaneseDateString)
+                                .padding()
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 50)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(style: StrokeStyle(lineWidth: 3))
+                                .foregroundStyle(.gray.opacity(0.1))
+                        )
+                    }
+                } comment: {
+                    Text("※〆切まで寄付もらえなかった場合、自動削除いたします。")
+                        .font(.caption)
+                        .foregroundStyle(.gray)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+
+                
                 CustomSectionView("受け渡し場所", required: true, showWrongInputError: vm.formValidateResult == .invalidField(.adress)) {
                     TextFieldWithMapPickerView(
                         adress: $vm.adress,
