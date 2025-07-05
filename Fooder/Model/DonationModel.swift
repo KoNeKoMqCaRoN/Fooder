@@ -57,7 +57,7 @@ extension DonationModel {
     ///   - foodItemID: 使用する食品アイテムのID（省略時は新しいUUID）
     ///   - donorID: 寄付者のユーザーID（省略時は新しいUUID）
     /// - Returns: 初期化された `DonationModel` のダミーインスタンス
-    static func getDummy(foodItemID: String = UUID().uuidString, donorID: String = UUID().uuidString) -> DonationModel {
+    static func dummy(foodItemID: String = UUID().uuidString, donorID: String = UUID().uuidString) -> DonationModel {
         return DonationModel(
             donorID: donorID,
             foodItemID: foodItemID,
