@@ -23,4 +23,5 @@ enum InputField {
     case comment
     case priority
     case expirationDate
+    case needBy
 }

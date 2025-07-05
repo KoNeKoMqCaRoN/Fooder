@@ -14,6 +14,7 @@ class RequestSheetViewModel: ObservableObject {
     @Published var amount: String = ""
     @Published var unit: String = ""
     @Published var selectedFoodCategory: FoodCategory = .others
+    @Published var needBy: Date = Date()
     @Published var adress: String = ""
     @Published var phoneNumber: String = ""
     @Published var lat: Double = 0.0
