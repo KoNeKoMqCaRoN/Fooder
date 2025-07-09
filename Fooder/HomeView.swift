@@ -30,6 +30,11 @@ struct Donation: Identifiable {
    
 }
 
+struct TestView: View {
+   var body: some View {
+      Color.blue
+   }
+}
 
 struct ContentView: View {
     @State private var showDonationSheetView: Bool = false
@@ -76,7 +81,7 @@ struct ContentView: View {
    
 }
 
-extension ContentView {
+extension HomeView {
    
    private var header : some View {
       HStack {
@@ -190,5 +195,5 @@ extension ContentView {
 }
 
 #Preview {
-   ContentView()
+   HomeView()
 }
